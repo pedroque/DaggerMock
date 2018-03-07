@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DaggerMock</string>
+    <string name="hamburger_rating">%.01f</string>
 </resources>

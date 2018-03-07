@@ -4,29 +4,90 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+ext.versionMajor = 0
+ext.versionMinor = 1
+ext.versionPatch = 0
+
 android {
-    compileSdkVersion 26
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
     defaultConfig {
         applicationId "com.example.pedroabinajm.daggermock"
-        minSdkVersion 15
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode computeVersionCode()
+        versionName computeVersionName()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+
+    dataBinding {
+        enabled = true
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 }
 
+kapt {
+    generateStubs = true
+}
+
 dependencies {
+    def presentationDependencies = rootProject.ext.presentationDependencies
+    def presentationTestDependencies = rootProject.ext.presentationTestDependencies
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation project(':domain')
+    implementation project(':data')
+
+    // Kotlin
+    implementation presentationDependencies.kotlin
+    kapt presentationDependencies.dataBindingComiler
+
+    // ViewModel and LiveData
+    implementation presentationDependencies.archLifecycleExtensions
+
+    // Android Support
+    implementation presentationDependencies.appCompatV7
+    implementation presentationDependencies.supportDesign
+
+    // DI
+    implementation presentationDependencies.dagger
+    implementation presentationDependencies.daggerAndroid
+    implementation presentationDependencies.daggerAndroidSupport
+    kapt presentationDependencies.daggerCompiler
+    kapt presentationDependencies.daggerAndroidProcessor
+
+    // Test dependencies
+    testImplementation presentationTestDependencies.junit
+    testImplementation presentationTestDependencies.archCoreTesting
+    testImplementation presentationTestDependencies.mockito
+
+    // Android test dependencies
+    androidTestImplementation presentationTestDependencies.testRunner
+    androidTestImplementation presentationTestDependencies.testRules
+    androidTestImplementation presentationTestDependencies.espresso, {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation presentationTestDependencies.espressoContrib, {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+    }
+    androidTestImplementation presentationTestDependencies.mockitoAndroid
+    kaptAndroidTest presentationTestDependencies.daggerCompiler
+}
+
+@SuppressWarnings("GrMethodMayBeStatic")
+def computeVersionName() {
+    return "${versionMajor}.${versionMinor}.${versionPatch}"
+}
+
+@SuppressWarnings("GrMethodMayBeStatic")
+def computeVersionCode() {
+    return (versionMajor * 1_000_000) + (versionMinor * 1_000) + versionPatch
 }
