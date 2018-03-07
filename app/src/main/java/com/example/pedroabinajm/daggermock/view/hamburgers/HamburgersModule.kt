@@ -1,6 +1,5 @@
 package com.example.pedroabinajm.daggermock.view.hamburgers
 
-import com.example.pedroabinajm.daggermock.di.ActivityScope
 import com.example.pedroabinajm.daggermock.mapper.HamburgerMapper
 import com.example.pedroabinajm.daggermock.viewmodel.ViewModelFactory
 import com.example.pedroabinajm.data.repository.HamburgerRepositoryImpl
@@ -19,7 +18,6 @@ open class HamburgersModule {
             : HamburgerRepository = hamburgerRepository
 
     @Provides
-    @ActivityScope
     internal fun provideViewModelFactory(getHamburgers: GetHamburgers, hamburgerMapper: HamburgerMapper) =
             ViewModelFactory(getHamburgers, hamburgerMapper)
 
