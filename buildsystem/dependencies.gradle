@@ -11,6 +11,8 @@ ext {
     lifecycle_extensions_version = '1.1.0'
     kotlin_data_binding_version = '3.1.0-alpha04'
     javax_inject_version = '1'
+    rx_version = '2.1.0'
+    rx_android_version = '2.0.1'
 
     // Test dependencies version
     junit_version = '4.12'
@@ -29,18 +31,20 @@ ext {
             daggerAndroidProcessor : "com.google.dagger:dagger-android-processor:$dagger_version",
             daggerCompiler         : "com.google.dagger:dagger-compiler:$dagger_version",
             dagger                 : "com.google.dagger:dagger:$dagger_version",
+            rxJava                 : "io.reactivex.rxjava2:rxjava:$rx_version",
+            rxAndroid              : "io.reactivex.rxjava2:rxandroid:$rx_android_version"
     ]
 
     presentationTestDependencies = [
-            junit           : "junit:junit:$junit_version",
-            archCoreTesting : "android.arch.core:core-testing:$lifecycle_extensions_version",
-            mockito         : "org.mockito:mockito-core:$mockito_version",
-            testRunner      : "com.android.support.test:runner:$testrunner_version",
-            testRules       : "com.android.support.test:rules:$testrunner_version",
-            espresso        : "com.android.support.test.espresso:espresso-core:$espresso_version",
-            espressoContrib : "com.android.support.test.espresso:espresso-contrib:$espresso_version",
-            mockitoAndroid  : "org.mockito:mockito-android:$mockito_version",
-            daggerCompiler  : "com.google.dagger:dagger-compiler:$dagger_version"
+            junit          : "junit:junit:$junit_version",
+            archCoreTesting: "android.arch.core:core-testing:$lifecycle_extensions_version",
+            mockito        : "org.mockito:mockito-core:$mockito_version",
+            testRunner     : "com.android.support.test:runner:$testrunner_version",
+            testRules      : "com.android.support.test:rules:$testrunner_version",
+            espresso       : "com.android.support.test.espresso:espresso-core:$espresso_version",
+            espressoContrib: "com.android.support.test.espresso:espresso-contrib:$espresso_version",
+            mockitoAndroid : "org.mockito:mockito-android:$mockito_version",
+            daggerCompiler : "com.google.dagger:dagger-compiler:$dagger_version"
     ]
 
     dataDependencies = [
@@ -50,6 +54,8 @@ ext {
             daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:$dagger_version",
             daggerCompiler        : "com.google.dagger:dagger-compiler:$dagger_version",
             dagger                : "com.google.dagger:dagger:$dagger_version",
+            rxJava                : "io.reactivex.rxjava2:rxjava:$rx_version",
+            rxAndroid             : "io.reactivex.rxjava2:rxandroid:$rx_android_version"
     ]
 
     dataTestDependencies = [
@@ -60,6 +66,7 @@ ext {
     domainDependencies = [
             kotlin     : "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version",
             javaxInject: "javax.inject:javax.inject:$javax_inject_version",
+            rxJava     : "io.reactivex.rxjava2:rxjava:$rx_version"
     ]
 
     domainTestDependencies = [

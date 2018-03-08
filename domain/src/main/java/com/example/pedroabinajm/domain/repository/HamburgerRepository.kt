@@ -1,7 +1,8 @@
 package com.example.pedroabinajm.domain.repository
 
 import com.example.pedroabinajm.domain.Hamburger
+import io.reactivex.Observable
 
 interface HamburgerRepository {
-    fun getHamburgers() : List<Hamburger>
+    fun getHamburgers() : Observable<List<Hamburger>>
 }

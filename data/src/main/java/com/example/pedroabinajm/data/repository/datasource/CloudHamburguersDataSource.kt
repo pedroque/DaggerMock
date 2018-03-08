@@ -1,10 +1,12 @@
 package com.example.pedroabinajm.data.repository.datasource
 
 import com.example.pedroabinajm.domain.Hamburger
+import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 class CloudHamburguersDataSource : HamburguerDataSource{
-    override fun getHamburguers(): List<Hamburger> {
-        return listOf(
+    override fun getHamburguers(): Observable<List<Hamburger>> {
+        return Observable.just(listOf(
                 Hamburger("Holy Burguer", 5f, "R. Dr. Cesário Mota Júnior, 527"),
                 Hamburger("General Prime Burguer", 4f, "R. Joaquim Floriano, 541"),
                 Hamburger("Butcher's Market", 4.5f, "R. Bandeira Paulista, 164"),
@@ -17,7 +19,7 @@ class CloudHamburguersDataSource : HamburguerDataSource{
                 Hamburger("A Chapa", 2.5f, "Alameda Santos, 24"),
                 Hamburger("Fifties", 2f, "Shopping Eldorado"),
                 Hamburger("Osnir", 3f, "Av. Jabaquara, 538")
-        )
+        )).delay(3, TimeUnit.SECONDS)
     }
 
 }

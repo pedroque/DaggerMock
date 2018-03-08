@@ -54,6 +54,10 @@ dependencies {
     implementation presentationDependencies.appCompatV7
     implementation presentationDependencies.supportDesign
 
+    // Rx
+    implementation presentationDependencies.rxJava
+    implementation presentationDependencies.rxAndroid
+
     // DI
     implementation presentationDependencies.dagger
     implementation presentationDependencies.daggerAndroid

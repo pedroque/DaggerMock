@@ -16,10 +16,13 @@ import com.example.pedroabinajm.daggermock.OrientationChangeAction.Companion.ori
 import com.example.pedroabinajm.daggermock.R
 import com.example.pedroabinajm.daggermock.MockAndroidInjector
 import com.example.pedroabinajm.daggermock.mapper.HamburgerMapper
+import com.example.pedroabinajm.daggermock.schedulers.AndroidTestScheduleProvider
 import com.example.pedroabinajm.daggermock.viewmodel.ViewModelFactory
 import com.example.pedroabinajm.domain.Hamburger
 import com.example.pedroabinajm.domain.interactor.GetHamburgers
 import com.example.pedroabinajm.domain.repository.HamburgerRepository
+import io.reactivex.Observable
+import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,6 +30,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import java.io.IOException
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -38,7 +42,10 @@ class HamburgersActivityTest {
             super.beforeActivityLaunched()
             val myApp = InstrumentationRegistry.getTargetContext().applicationContext as BaseApp
             myApp.activityDispatchingAndroidInjector = MockAndroidInjector.activity<HamburgersActivity> {
-                viewModelFactory = ViewModelFactory(GetHamburgers(hamburgersRepository), HamburgerMapper())
+                viewModelFactory = ViewModelFactory(
+                        GetHamburgers(hamburgersRepository, AndroidTestScheduleProvider()),
+                        HamburgerMapper()
+                )
             }
         }
     }
@@ -58,11 +65,12 @@ class HamburgersActivityTest {
                 Hamburger("Pedro Burger", 5f, "Rua Luís Góis, 206")
         )
         Mockito.`when`(hamburgersRepository.getHamburgers())
-                .thenReturn(hamburgers)
+                .thenReturn(Observable.just(hamburgers))
 
+        // Launch activity
         activityRule.launchActivity(null)
 
-
+        // Assert values
         onView(withRecyclerView(R.id.hamburgers_recycler).atPosition(0))
                 .check(matches(hasDescendant(withText("Pedro Burger"))))
 
@@ -70,6 +78,44 @@ class HamburgersActivityTest {
 
         onView(withRecyclerView(R.id.hamburgers_recycler).atPosition(0))
                 .check(matches(hasDescendant(withText("Pedro Burger"))))
+    }
+
+    @Test
+    fun hamburgersNetworkErrorTest(){
+        // Mock network error
+        Mockito.`when`(hamburgersRepository.getHamburgers())
+                .thenReturn(Observable.error(IOException()))
+
+        // Launch activity
+        activityRule.launchActivity(null)
+
+        // Assert values
+        onView(withId(R.id.error_text))
+                .check(matches(allOf(withText(R.string.network_error), isDisplayed())))
+
+        rotateScreen(activityRule.activity)
+
+        onView(withId(R.id.error_text))
+                .check(matches(allOf(withText(R.string.network_error), isDisplayed())))
+    }
+
+    @Test
+    fun hamburgersUnexpectedErrorTest(){
+        // Mock network error
+        Mockito.`when`(hamburgersRepository.getHamburgers())
+                .thenReturn(Observable.error(Throwable()))
+
+        // Launch activity
+        activityRule.launchActivity(null)
+
+        // Assert values
+        onView(withId(R.id.error_text))
+                .check(matches(allOf(withText(R.string.unexpected_error), isDisplayed())))
+
+        rotateScreen(activityRule.activity)
+
+        onView(withId(R.id.error_text))
+                .check(matches(allOf(withText(R.string.unexpected_error), isDisplayed())))
     }
 
     private fun rotateScreen(activity: Activity) {
