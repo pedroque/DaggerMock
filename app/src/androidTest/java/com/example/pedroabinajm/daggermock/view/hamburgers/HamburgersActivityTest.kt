@@ -14,7 +14,7 @@ import com.example.pedroabinajm.daggermock.Matchers.withRecyclerView
 import com.example.pedroabinajm.daggermock.OrientationChangeAction.Companion.orientationLandscape
 import com.example.pedroabinajm.daggermock.OrientationChangeAction.Companion.orientationPortrait
 import com.example.pedroabinajm.daggermock.R
-import com.example.pedroabinajm.daggermock.Utils
+import com.example.pedroabinajm.daggermock.MockAndroidInjector
 import com.example.pedroabinajm.daggermock.mapper.HamburgerMapper
 import com.example.pedroabinajm.daggermock.viewmodel.ViewModelFactory
 import com.example.pedroabinajm.domain.Hamburger
@@ -37,7 +37,7 @@ class HamburgersActivityTest {
         override fun beforeActivityLaunched() {
             super.beforeActivityLaunched()
             val myApp = InstrumentationRegistry.getTargetContext().applicationContext as BaseApp
-            myApp.activityDispatchingAndroidInjector = Utils.createFakeActivityInjector<HamburgersActivity> {
+            myApp.activityDispatchingAndroidInjector = MockAndroidInjector.activity<HamburgersActivity> {
                 viewModelFactory = ViewModelFactory(GetHamburgers(hamburgersRepository), HamburgerMapper())
             }
         }
