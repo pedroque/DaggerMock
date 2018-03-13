@@ -11,10 +11,10 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.example.pedroabinajm.daggermock.BaseApp
 import com.example.pedroabinajm.daggermock.Matchers.withRecyclerView
+import com.example.pedroabinajm.daggermock.MockAndroidInjector
 import com.example.pedroabinajm.daggermock.OrientationChangeAction.Companion.orientationLandscape
 import com.example.pedroabinajm.daggermock.OrientationChangeAction.Companion.orientationPortrait
 import com.example.pedroabinajm.daggermock.R
-import com.example.pedroabinajm.daggermock.MockAndroidInjector
 import com.example.pedroabinajm.daggermock.mapper.HamburgerMapper
 import com.example.pedroabinajm.daggermock.schedulers.AndroidTestScheduleProvider
 import com.example.pedroabinajm.daggermock.viewmodel.ViewModelFactory
@@ -81,7 +81,7 @@ class HamburgersActivityTest {
     }
 
     @Test
-    fun hamburgersNetworkErrorTest(){
+    fun hamburgersNetworkErrorTest() {
         // Mock network error
         Mockito.`when`(hamburgersRepository.getHamburgers())
                 .thenReturn(Observable.error(IOException()))
@@ -100,7 +100,7 @@ class HamburgersActivityTest {
     }
 
     @Test
-    fun hamburgersUnexpectedErrorTest(){
+    fun hamburgersUnexpectedErrorTest() {
         // Mock network error
         Mockito.`when`(hamburgersRepository.getHamburgers())
                 .thenReturn(Observable.error(Throwable()))
@@ -127,6 +127,5 @@ class HamburgersActivityTest {
             onView(isRoot()).perform(orientationLandscape(activity))
         else
             onView(isRoot()).perform(orientationPortrait(activity))
-        Thread.sleep(1500)
     }
 }

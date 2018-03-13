@@ -5,21 +5,19 @@ import com.example.pedroabinajm.daggermock.BaseApp
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
+import dagger.android.AndroidInjector
 
 @Component(modules = [
     AndroidInjectionModule::class,
     AppModule::class,
     ActivityBuilder::class
 ])
-interface AppComponent {
+interface AppComponent : AndroidInjector<BaseApp>{
 
     @Component.Builder
-    interface Builder {
+    abstract class Builder : AndroidInjector.Builder<BaseApp>() {
         @BindsInstance
-        fun application(application: Application): Builder
-        fun appModule(appModule: AppModule): Builder
-        fun build(): AppComponent
+        abstract fun application(application: Application): Builder
+        abstract fun appModule(appModule: AppModule): Builder
     }
-
-    fun inject(app: BaseApp)
 }

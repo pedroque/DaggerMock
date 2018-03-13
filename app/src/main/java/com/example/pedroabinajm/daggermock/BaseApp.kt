@@ -20,7 +20,7 @@ class BaseApp : Application(), HasActivityInjector {
                 .builder()
                 .application(this)
                 .appModule(AppModule(this))
-                .build()
+                .create(this)
                 .inject(this)
     }
 
